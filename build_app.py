@@ -23,6 +23,10 @@ def clean_temp_files():
     if build_dir.exists():
         shutil.rmtree(build_dir, ignore_errors=True)
 
+    app_dist_dir = BASE_DIR / "dist" / "YouTube Music Pro"
+    if app_dist_dir.exists():
+        shutil.rmtree(app_dist_dir, ignore_errors=True)
+
     downloads_dir = BASE_DIR / "downloads"
     if downloads_dir.exists():
         for item in downloads_dir.glob("*"):
@@ -46,6 +50,7 @@ def build():
         "-m", "PyInstaller",
         "--noconsole",
         "--onedir",
+        "--noconfirm",
         "--name", "YouTube Music Pro",
         f"--version-file={VERSION_INFO}",
         f"--add-data={WEB_DIR}{os.pathsep}web",

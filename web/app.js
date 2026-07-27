@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const analyzeBtn = document.getElementById('analyze-btn');
   const openMusicFolderBtn = document.getElementById('open-music-folder-btn');
   const openVideoFolderBtn = document.getElementById('open-video-folder-btn');
+  const loginBrowserBtn = document.getElementById('login-browser-btn');
 
   const previewSection = document.getElementById('preview-section');
   const videoThumbnail = document.getElementById('video-thumbnail');
@@ -90,6 +91,27 @@ document.addEventListener('DOMContentLoaded', () => {
   openVideoFolderBtn.addEventListener('click', () => {
     if (window.pywebview && window.pywebview.api) {
       window.pywebview.api.open_video_folder();
+    }
+  });
+
+  // Import YouTube auth cookies from browser (explicit user action only)
+  loginBrowserBtn.addEventListener('click', async () => {
+    if (!(window.pywebview && window.pywebview.api)) return;
+    loginBrowserBtn.disabled = true;
+    loginBrowserBtn.innerHTML = '🔄 در حال خواندن کوکی‌ها...';
+    try {
+      const res = await window.pywebview.api.import_browser_cookies();
+      if (res && res.success) {
+        showErrorModal('✅ کوکی‌های یوتیوب با موفقیت از مرورگر خوانده شد.');
+      } else {
+        showErrorModal(res.error || 'مرورگری با نشست فعال یوتیوب پیدا نشد. لطفاً ابتدا در مرورگر خود وارد youtube.com شوید.');
+      }
+    } catch (err) {
+      console.error(err);
+      showErrorModal('خطا در خواندن کوکی‌های مرورگر.');
+    } finally {
+      loginBrowserBtn.disabled = false;
+      loginBrowserBtn.innerHTML = '🔑 ورود با مرورگر';
     }
   });
 

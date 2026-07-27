@@ -18,8 +18,6 @@ from config import (
     DEFAULT_AUDIO_FORMAT,
     DEFAULT_VIDEO_FORMAT,
 )
-from auto_cookies import auto_generate_cookies
-
 logger = logging.getLogger(__name__)
 
 
@@ -100,9 +98,6 @@ def get_base_ydl_opts(url: str = "", download: bool = False) -> Dict[str, Any]:
     """
     cookies_path = Path(__file__).resolve().parent / "cookies.txt"
 
-    # Automatically extract cookies from browsers if missing or empty
-    auto_generate_cookies(cookies_path)
-
     opts: Dict[str, Any] = {
         'quiet': True,
         'no_warnings': True,
@@ -110,16 +105,10 @@ def get_base_ydl_opts(url: str = "", download: bool = False) -> Dict[str, Any]:
         'nocheckcertificate': True,
     }
 
+    # Only use cookies.txt if the user has explicitly imported it via "Login via Browser".
+    # No silent/automatic browser cookie reading here.
     if cookies_path.exists() and cookies_path.stat().st_size > 50:
         opts['cookiefile'] = str(cookies_path)
-    else:
-        # Direct browser cookie reading fallback
-        for browser_name in ['firefox', 'chrome', 'edge', 'brave', 'opera']:
-            try:
-                opts['cookiesfrombrowser'] = (browser_name,)
-                break
-            except Exception:
-                continue
 
     if 'youtube' in url or 'youtu.be' in url:
         opts['extractor_args'] = {
@@ -209,8 +198,6 @@ def download_audio_only(url: str, progress_callback: Optional[Callable] = None) 
     Downloads audio only (320kbps MP3) and saves to logged-in user's Downloads/Music folder.
     """
     target_url = normalize_youtube_url(url)
-    cookies_path = Path(__file__).resolve().parent / "cookies.txt"
-    auto_generate_cookies(cookies_path)
 
     out_template = str(USER_MUSIC_DIR / '%(title).100s [%(id)s].%(ext)s')
 
@@ -277,8 +264,6 @@ def download_video_only(url: str, progress_callback: Optional[Callable] = None) 
     Downloads highest quality MP4 video and saves to logged-in user's Downloads/Videos folder.
     """
     target_url = normalize_youtube_url(url)
-    cookies_path = Path(__file__).resolve().parent / "cookies.txt"
-    auto_generate_cookies(cookies_path)
 
     out_template = str(USER_VIDEO_DIR / '%(title).100s [%(id)s].%(ext)s')
 

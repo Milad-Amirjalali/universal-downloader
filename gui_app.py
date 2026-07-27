@@ -11,7 +11,10 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
 from extractor import probe_audio_formats, download_media
+from auto_cookies import auto_generate_cookies
 from config import USER_MUSIC_DIR, USER_VIDEO_DIR
+
+COOKIES_PATH = Path(__file__).resolve().parent / "cookies.txt"
 
 logger = logging.getLogger(__name__)
 executor = ThreadPoolExecutor(max_workers=4)
@@ -42,6 +45,16 @@ class DesktopApi:
             return {"success": True}
         except Exception as e:
             logger.error(f"Error opening video folder: {e}")
+            return {"success": False, "error": str(e)}
+
+    def import_browser_cookies(self):
+        """Explicitly reads YouTube auth cookies from installed browsers, only on user request."""
+        future = executor.submit(auto_generate_cookies, COOKIES_PATH)
+        try:
+            ok = future.result(timeout=15)
+            return {"success": bool(ok)}
+        except Exception as e:
+            logger.error(f"Cookie import error: {e}")
             return {"success": False, "error": str(e)}
 
     def probe_url(self, url: str):
