@@ -5,3 +5,7 @@ python-dotenv>=1.0.0
 curl_cffi>=0.7.0
 pywebview>=5.0
 pyinstaller>=6.0
+browser-cookie3>=0.19.1
+yt-dlp-ejs>=0.8.0
+lz4>=4.3.0
+pycryptodomex>=3.19.0
