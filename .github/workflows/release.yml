@@ -1,0 +1,60 @@
+name: Build & Publish Release Executables
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    name: Build Windows Release
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Set up Deno Engine
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download & Place Deno Executable for PyInstaller
+        run: |
+          mkdir -p venv/Scripts
+          cp $(which deno) venv/Scripts/deno.exe
+
+      - name: Build Portable Executable (.exe)
+        run: python build_app.py
+
+      - name: Build Windows Installer (Setup.exe)
+        run: python build_setup.py
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/YouTube Music Pro.exe
+            releases/Setup_YouTube_Media_Downloader_v1.0.exe
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
