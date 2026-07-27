@@ -37,11 +37,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Download & Place Deno Executable for PyInstaller
-        run: |
-          mkdir -p venv/Scripts
-          cp $(which deno) venv/Scripts/deno.exe
-
       - name: Build Portable Executable (.exe)
         run: python build_app.py
 

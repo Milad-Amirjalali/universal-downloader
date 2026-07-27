@@ -11,8 +11,9 @@ if hasattr(sys.stderr, 'reconfigure'):
 
 BASE_DIR = Path(__file__).parent.resolve()
 WEB_DIR = BASE_DIR / "web"
-DENO_EXE = BASE_DIR / "venv" / "Scripts" / "deno.exe"
 VERSION_INFO = BASE_DIR / "file_version_info.txt"
+
+from extractor import find_deno_executable
 
 
 def clean_temp_files():
@@ -35,6 +36,9 @@ def clean_temp_files():
 def build():
     clean_temp_files()
 
+    deno_exe = find_deno_executable() or (BASE_DIR / "venv" / "Scripts" / "deno.exe")
+    print(f"📌 استفاده از موتر Deno: {deno_exe}")
+
     print("🚀 در حال ساخت فایل اجرایی جدید ویندوز با متادیتای رسمی آنتی‌ویروس (.exe)...")
     
     cmd = [
@@ -45,7 +49,7 @@ def build():
         "--name", "YouTube Music Pro",
         f"--version-file={VERSION_INFO}",
         f"--add-data={WEB_DIR}{os.pathsep}web",
-        f"--add-binary={DENO_EXE}{os.pathsep}.",
+        f"--add-binary={deno_exe}{os.pathsep}.",
         "--hidden-import", "yt_dlp",
         "--hidden-import", "mutagen",
         "--hidden-import", "webview",
