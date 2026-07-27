@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universal Media Downloader Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon">🎬</div>
+        <div class="logo-text">
+          <h1>Universal Media Downloader <span class="badge">PRO</span></h1>
+          <p>استخراج مستقیم ویدیو و موزیک از تمام سایت‌ها (یوتیوب، اینستاگرام، تیک‌تاک و...)</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="open-music-folder-btn" class="secondary-btn" title="باز کردن پوشه موزیک‌های کاربر">📂 پوشه موزیک‌ها</button>
+        <button id="open-video-folder-btn" class="secondary-btn" title="باز کردن پوشه ویدیوهای کاربر">🎬 پوشه ویدیوها</button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      <!-- Input Section -->
+      <section class="input-card glass-panel">
+        <div class="input-wrapper">
+          <input type="text" id="media-url" placeholder="لینک ویدیو یا آهنگ را اینجا وارد کنید (YouTube, Instagram, TikTok, etc.)..." autocomplete="off">
+          <button id="paste-btn" class="icon-btn" title="جای‌گذاری از حافظه">📋 چسباندن</button>
+        </div>
+        <button id="analyze-btn" class="primary-btn pulse-glow">
+          <span class="btn-icon">🔍</span> آنالیز لینک
+        </button>
+      </section>
+
+      <!-- Video/Audio Preview Section (Hidden by default) -->
+      <section id="preview-section" class="preview-card glass-panel hidden">
+        <div class="media-preview">
+          <div class="thumbnail-wrapper">
+            <img id="video-thumbnail" src="" alt="پیش‌نمایش ویدیو">
+            <span id="video-duration" class="duration-tag">0:00</span>
+          </div>
+          <div class="media-info">
+            <h2 id="video-title">عنوان رسانه</h2>
+            <p id="video-artist">نام کانال / خواننده</p>
+            <div class="quality-badges">
+              <span id="original-resolution-badge" class="tech-badge">🎬 کیفیت ویدیو: 1080p</span>
+              <span id="original-quality-badge" class="tech-badge">🎵 کیفیت صدا: 320 kbps</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Download Mode Options -->
+        <div class="download-options-title">📌 نحوه دریافت را انتخاب کنید:</div>
+        <div class="download-modes-grid">
+          <div class="mode-card active" data-mode="audio">
+            <div class="mode-icon">🎵</div>
+            <div class="mode-title">فقط صدا</div>
+            <div class="mode-desc">استخراج فایل MP3 با کیفیت 320kbps (ذخیره در Downloads\Music)</div>
+          </div>
+          <div class="mode-card" data-mode="video">
+            <div class="mode-icon">🎬</div>
+            <div class="mode-title">فقط ویدیو</div>
+            <div class="mode-desc">دانلود با بالاترین کیفیت MP4 (ذخیره در Downloads\Videos)</div>
+          </div>
+          <div class="mode-card" data-mode="both">
+            <div class="mode-icon">📦</div>
+            <div class="mode-title">ویدیو + صدا</div>
+            <div class="mode-desc">دانلود هر دو فایل به‌صورت جداگانه در پوشه‌های مربوطه</div>
+          </div>
+        </div>
+
+        <button id="download-btn" class="download-action-btn pulse-glow">
+          ⚡️ دریافت فایل با کیفیت عالی
+        </button>
+      </section>
+
+      <!-- Download Progress Section (Hidden by default) -->
+      <section id="progress-section" class="progress-card glass-panel hidden">
+        <div class="progress-header">
+          <span id="status-text">در حال استخراج و دریافت...</span>
+          <span id="progress-percentage">0%</span>
+        </div>
+        <div class="progress-bar-container">
+          <div id="progress-bar" class="progress-bar-fill"></div>
+        </div>
+      </section>
+
+      <!-- Quality Metrics & Result Section (Hidden by default) -->
+      <section id="result-section" class="result-card glass-panel hidden">
+        <div class="result-header">
+          <div class="success-icon">✨</div>
+          <h3>گزارش دریافت و سنجش کیفیت</h3>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <span class="metric-label">📊 ارزیابی کیفیت</span>
+            <span id="metric-score" class="metric-value highlight">🔥 فوق‌العاده</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">🎧 کیفیت صدا</span>
+            <span id="metric-bitrate" class="metric-value">320 kbps</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">🔊 نمونه‌برداری</span>
+            <span id="metric-sample-rate" class="metric-value">44100 Hz</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">💾 حجم فایل</span>
+            <span id="metric-size" class="metric-value">0 MB</span>
+          </div>
+        </div>
+
+        <!-- Built-in Audio Player -->
+        <div class="player-container">
+          <div class="player-waveform">
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+          </div>
+          <audio id="audio-player" controls style="width: 100%;"></audio>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Custom Error Modal -->
+  <div id="error-modal" class="modal-overlay hidden">
+    <div class="modal-card glass-panel">
+      <div class="modal-header">
+        <span class="modal-icon">⚠️</span>
+        <h3>راهنمای خطا</h3>
+      </div>
+      <div id="error-modal-body" class="modal-body">
+        خطا در پردازش لینک.
+      </div>
+      <button id="close-modal-btn" class="primary-btn">متوجه شدم</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

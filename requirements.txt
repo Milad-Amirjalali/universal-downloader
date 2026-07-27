@@ -1,0 +1,7 @@
+yt-dlp>=2024.0.0
+python-telegram-bot>=20.0
+mutagen>=1.46.0
+python-dotenv>=1.0.0
+curl_cffi>=0.7.0
+pywebview>=5.0
+pyinstaller>=6.0

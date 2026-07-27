@@ -1,0 +1,32 @@
+# Virtual Environment
+venv/
+ENV/
+env/
+
+# Python cache & build files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# PyInstaller build artifacts
+build/
+dist/
+*.manifest
+*.spec
+
+# User data & credentials
+.env
+cookies.txt
+downloads/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+.DS_Store
