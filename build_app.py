@@ -45,7 +45,7 @@ def build():
         sys.executable,
         "-m", "PyInstaller",
         "--noconsole",
-        "--onefile",
+        "--onedir",
         "--name", "YouTube Music Pro",
         f"--version-file={VERSION_INFO}",
         f"--add-data={WEB_DIR}{os.pathsep}web",
@@ -60,7 +60,7 @@ def build():
     
     result = subprocess.run(cmd, cwd=BASE_DIR)
     if result.returncode == 0:
-        exe_path = BASE_DIR / "dist" / "YouTube Music Pro.exe"
+        exe_path = BASE_DIR / "dist" / "YouTube Music Pro" / "YouTube Music Pro.exe"
         print("\n" + "=" * 60)
         print("🎉 **ساخت فایل اجرایی رسمی ویندوز با موفقیت انجام شد!**")
         print(f"📁 **مسیر فایل .exe تولید شده**: {exe_path}")

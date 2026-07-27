@@ -43,11 +43,15 @@ jobs:
       - name: Build Windows Installer (Setup.exe)
         run: python build_setup.py
 
+      - name: Zip Portable Build
+        run: Compress-Archive -Path "dist/YouTube Music Pro" -DestinationPath "dist/YouTube-Music-Pro-Portable.zip"
+        shell: pwsh
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/YouTube Music Pro.exe
+            dist/YouTube-Music-Pro-Portable.zip
             releases/Setup_YouTube_Media_Downloader_v1.0.exe
           draft: false
           prerelease: false
